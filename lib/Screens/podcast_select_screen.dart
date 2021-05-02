@@ -15,11 +15,7 @@ class PodcastSelect extends StatelessWidget {
       key: scaffoldKey,
       appBar: NAppBar(),
       drawer: NDrawer(NDrawer.PODCAST_SELECT),
-      bottomSheet: Container(
-        height: 150,
-        // color: Colors.red,
-        child: MiniPlayer(),
-      ),
+      bottomSheet: MiniPlayer(),
       body: Container(
         padding: EdgeInsets.only(top: 60, left: 20, right: 20, bottom: 20),
         // color: Colors.white,
@@ -39,7 +35,8 @@ class PodcastSelect extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            PodcastSelectList()
+            PodcastSelectList(),
+            // TestMusicSheet(),
           ],
         ),
       ),
@@ -79,13 +76,6 @@ class PodcastImageTile extends StatelessWidget {
   PodcastImageTile(this.imageUrl, this.podcastLink, this.podcastName);
 
   final String imageUrl, podcastLink, podcastName;
-
-  //Updates Singleton with selected podcast and plays first episode
-  // updateEpisodes() async {
-  //   var singleton = PodcastSingleton();
-  //   await singleton.updateEpisodes(podcastLink);
-  //   // AudioService.playFromMediaId(singleton.episodes[0].id);
-  // }
 
   @override
   Widget build(BuildContext context) {
