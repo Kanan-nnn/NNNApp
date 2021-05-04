@@ -21,16 +21,16 @@ class PodcastData with ChangeNotifier {
 
   String get podcastName => podcastName;
 
-  loadThoughtsFromFirebase() async {
-    var thougtsFromFirebase = FirebaseFirestore.instance.collection('Thoughts');
-    await thougtsFromFirebase.get().then((value) {
-      value.docs.forEach((element) {
-        print("${element.data()['thought']}");
-        _thoughts.add(element.data()['thought']);
-      });
-    });
-    notifyListeners();
-  }
+  // loadThoughtsFromFirebase() async {
+  //   var thougtsFromFirebase = FirebaseFirestore.instance.collection('Thoughts');
+  //   await thougtsFromFirebase.get().then((value) {
+  //     value.docs.forEach((element) {
+  //       print("${element.data()['thought']}");
+  //       _thoughts.add(element.data()['thought']);
+  //     });
+  //   });
+  //   notifyListeners();
+  // }
 
   loadPodcastsFromFirebase() async {
     await Firebase.initializeApp();
@@ -45,12 +45,11 @@ class PodcastData with ChangeNotifier {
             element.data()['feed_link'], element.data()['image_url']);
 
         _podcasts.add(podcastItem);
-        print("podcasts length ${_podcasts.length}");
       });
     });
 
     notifyListeners();
-    await loadThoughtsFromFirebase();
+    // await loadThoughtsFromFirebase();
   }
 
   _parseHtmlString(String htmlString) {

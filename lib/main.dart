@@ -24,21 +24,3 @@ void main() {
     ),
   ));
 }
-
-// void main() {
-//   runApp(MaterialApp(
-//     theme: ThemeData.light(),
-//     darkTheme: ThemeData.dark(),
-//     title: 'NNN App',
-//     //Double check scope of this widget
-//     home: AudioServiceWidget(child: PowerOnPage()),
-//     debugShowCheckedModeBanner: false,
-//     routes: {
-//       'PodcastPage': (context) => PodcastSelect(),
-//       'PowerOnPage': (context) => PowerOnPage(),
-//       'NotesPage': (context) => NotesPage(),
-//       'ThoughtForTheDay': (context) => ThoughtFTT(),
-//       'HealthySocialMedial': (context) => HealthySocialMedia(),
-//     },
-//   ));
-// }

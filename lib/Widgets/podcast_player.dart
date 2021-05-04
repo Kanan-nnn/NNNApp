@@ -46,20 +46,24 @@ class MiniPlayer extends StatelessWidget with AudioMethodsMixin {
       stream: _podcastPlayerStateStream,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
+          print("Stream has no data");
           return SizedBox(
             height: 0,
           );
         }
         //Current Media Item
         final currentMediaItem = snapshot.data?.mediaState.mediaItem;
-        if (currentMediaItem == null) return Container();
+        if (currentMediaItem == null)
+          return SizedBox(
+            height: 0,
+          );
         var title = currentMediaItem.title;
         var imageUrl = currentMediaItem.artUri;
         //Current Playback state
         final currentPlaybackState = snapshot.data?.playbackState;
         var playing = currentPlaybackState?.playing ?? false;
-        var processingState = currentPlaybackState?.processingState ??
-            AudioProcessingState.stopped;
+        // var processingState = currentPlaybackState?.processingState ??
+        // AudioProcessingState.stopped;
         //Current Media State
         final mediaState = snapshot.data?.mediaState;
         return SizedBox(
@@ -84,48 +88,8 @@ class MiniPlayer extends StatelessWidget with AudioMethodsMixin {
                     ),
                     Expanded(
                       child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            IconButton(
-                                icon: Icon(
-                                  Icons.replay_5,
-                                  size: 40,
-                                ),
-                                onPressed: () {
-                                  rewind(mediaState?.position, 5);
-                                }),
-                            IconButton(
-                                icon: Icon(Icons.replay_10, size: 40),
-                                onPressed: () {
-                                  rewind(mediaState?.position, 10);
-                                }),
-                            playing
-                                ? IconButton(
-                                    icon: Icon(Icons.pause, size: 40),
-                                    onPressed: pause)
-                                : IconButton(
-                                    icon: Icon(Icons.play_arrow, size: 40),
-                                    onPressed: play),
-                            IconButton(
-                                icon: Icon(Icons.replay_30, size: 40),
-                                onPressed: () {
-                                  rewind(mediaState?.position, 30);
-                                }),
-                            IconButton(
-                                icon: Icon(Icons.night_shelter, size: 40),
-                                onPressed: () {
-                                  showModalBottomSheet(
-                                      context: context,
-                                      builder: (context) {
-                                        return SleepTimerSheet();
-                                      });
-                                }),
-                            if (processingState == AudioProcessingState.stopped)
-                              IconButton(
-                                  icon: Icon(Icons.power), onPressed: stop),
-                          ],
-                        ),
+                        child: ControlButtons(
+                            mediaState: mediaState, playing: playing),
                       ),
                     ),
                     SeekBar(
@@ -143,6 +107,55 @@ class MiniPlayer extends StatelessWidget with AudioMethodsMixin {
           ),
         );
       },
+    );
+  }
+}
+
+class ControlButtons extends StatelessWidget with AudioMethodsMixin {
+  final MediaState? mediaState;
+  final bool playing;
+
+  const ControlButtons(
+      {Key? key, required this.mediaState, required this.playing})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        IconButton(
+            icon: Icon(
+              Icons.replay_5,
+              size: 40,
+            ),
+            onPressed: () {
+              rewind(mediaState?.position, 5);
+            }),
+        IconButton(
+            icon: Icon(Icons.replay_10, size: 40),
+            onPressed: () {
+              rewind(mediaState?.position, 10);
+            }),
+        playing
+            ? IconButton(icon: Icon(Icons.pause, size: 40), onPressed: pause)
+            : IconButton(
+                icon: Icon(Icons.play_arrow, size: 40), onPressed: play),
+        IconButton(
+            icon: Icon(Icons.replay_30, size: 40),
+            onPressed: () {
+              rewind(mediaState?.position, 30);
+            }),
+        IconButton(
+            icon: Icon(Icons.night_shelter, size: 40),
+            onPressed: () {
+              showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return SleepTimerSheet();
+                  });
+            }),
+      ],
     );
   }
 }
@@ -224,47 +237,7 @@ class BigPodcastPlayer extends StatelessWidget with AudioMethodsMixin {
               ],
             ),
             Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                      icon: Icon(
-                        Icons.replay_5,
-                        size: 40,
-                      ),
-                      onPressed: () {
-                        rewind(mediaState?.position, 5);
-                      }),
-                  IconButton(
-                      icon: Icon(Icons.replay_10, size: 40),
-                      onPressed: () {
-                        rewind(mediaState?.position, 10);
-                      }),
-                  playing
-                      ? IconButton(
-                          icon: Icon(Icons.pause, size: 40), onPressed: pause)
-                      : IconButton(
-                          icon: Icon(Icons.play_arrow, size: 40),
-                          onPressed: play),
-                  IconButton(
-                      icon: Icon(Icons.replay_30, size: 40),
-                      onPressed: () {
-                        rewind(mediaState?.position, 30);
-                      }),
-                  IconButton(
-                      icon: Icon(Icons.night_shelter, size: 40),
-                      onPressed: () {
-                        showModalBottomSheet(
-                            context: context,
-                            builder: (context) {
-                              return SleepTimerSheet();
-                            });
-                      }),
-                  SizedBox(
-                    width: 40,
-                  )
-                ],
-              ),
+              child: ControlButtons(mediaState: mediaState, playing: playing),
             ),
             SeekBar(
               duration: mediaState?.mediaItem?.duration ?? Duration.zero,

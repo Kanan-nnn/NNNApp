@@ -9,9 +9,9 @@ class EpisodeList extends StatelessWidget {
     return Consumer<PodcastData>(
       builder: (context, podcastData, child) {
         // return Container(child: Text("SNAPSHOT DATA IS : ${snapshot.data}"));
-        // if (!snapshot.hasData) {
-        //   return Center(child: CircularProgressIndicator());
-        // }
+        if (podcastData.episodes.isEmpty) {
+          return Center(child: CircularProgressIndicator());
+        }
         List<MediaItem> episodes = podcastData.episodes;
         return ListView.builder(
           itemBuilder: (context, index) {

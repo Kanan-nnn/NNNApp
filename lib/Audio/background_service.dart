@@ -12,14 +12,9 @@ class AudioServiceTask extends BackgroundAudioTask {
         playing: true,
         processingState: AudioProcessingState.connecting);
 
-    // await _player.setUrl(
-    //     "https://mcdn.podbean.com/mf/web/3bhqcs/NNN29_Audio_Levelled.mp3");
-
-    // _player.play();
-
     //Connected
     AudioServiceBackground.setState(
-        controls: [MediaControl.pause, MediaControl.stop],
+        controls: [MediaControl.pause],
         playing: false,
         processingState: AudioProcessingState.ready);
   }
@@ -39,7 +34,7 @@ class AudioServiceTask extends BackgroundAudioTask {
   @override
   Future<void> onPause() async {
     AudioServiceBackground.setState(
-        controls: [MediaControl.play, MediaControl.rewind],
+        controls: [MediaControl.play],
         playing: false,
         processingState: AudioProcessingState.ready);
     _player.pause();
@@ -87,5 +82,9 @@ class AudioServiceTask extends BackgroundAudioTask {
         playing: true,
         position: position,
         processingState: AudioProcessingState.ready);
+  }
+
+  Future<void> onTaskRemoved() async {
+    await onStop();
   }
 }
