@@ -223,27 +223,30 @@ PODS:
     - BoringSSL-GRPC/Interface (= 0.0.7)
   - BoringSSL-GRPC/Interface (0.0.7)
   - cloud_firestore (1.0.7):
-    - Firebase/Firestore (= 7.11.0)
+    - Firebase/Firestore (= 8.0.0)
     - firebase_core
     - Flutter
-  - Firebase/CoreOnly (7.11.0):
-    - FirebaseCore (= 7.11.0)
-  - Firebase/Firestore (7.11.0):
-    - Firebase/CoreOnly
-    - FirebaseFirestore (~> 7.11.0)
-  - firebase_core (1.1.0):
-    - Firebase/CoreOnly (= 7.11.0)
+  - connectivity (0.0.1):
     - Flutter
-  - FirebaseCore (7.11.0):
-    - FirebaseCoreDiagnostics (~> 7.4)
-    - GoogleUtilities/Environment (~> 7.0)
-    - GoogleUtilities/Logger (~> 7.0)
-  - FirebaseCoreDiagnostics (7.11.0):
-    - GoogleDataTransport (~> 8.4)
-    - GoogleUtilities/Environment (~> 7.0)
-    - GoogleUtilities/Logger (~> 7.0)
+    - Reachability
+  - Firebase/CoreOnly (8.0.0):
+    - FirebaseCore (= 8.0.0)
+  - Firebase/Firestore (8.0.0):
+    - Firebase/CoreOnly
+    - FirebaseFirestore (~> 8.0.0)
+  - firebase_core (1.2.0):
+    - Firebase/CoreOnly (= 8.0.0)
+    - Flutter
+  - FirebaseCore (8.0.0):
+    - FirebaseCoreDiagnostics (~> 8.0)
+    - GoogleUtilities/Environment (~> 7.4)
+    - GoogleUtilities/Logger (~> 7.4)
+  - FirebaseCoreDiagnostics (8.1.0):
+    - GoogleDataTransport (~> 9.0)
+    - GoogleUtilities/Environment (~> 7.4)
+    - GoogleUtilities/Logger (~> 7.4)
     - nanopb (~> 2.30908.0)
-  - FirebaseFirestore (7.11.0):
+  - FirebaseFirestore (8.0.0):
     - abseil/algorithm (= 0.20200225.0)
     - abseil/base (= 0.20200225.0)
     - abseil/memory (= 0.20200225.0)
@@ -251,7 +254,7 @@ PODS:
     - abseil/strings/strings (= 0.20200225.0)
     - abseil/time (= 0.20200225.0)
     - abseil/types (= 0.20200225.0)
-    - FirebaseCore (~> 7.0)
+    - FirebaseCore (~> 8.0)
     - "gRPC-C++ (~> 1.28.0)"
     - leveldb-library (~> 1.22)
     - nanopb (~> 2.30908.0)
@@ -261,13 +264,13 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - GoogleDataTransport (8.4.0):
+  - GoogleDataTransport (9.0.0):
     - GoogleUtilities/Environment (~> 7.2)
     - nanopb (~> 2.30908.0)
     - PromisesObjC (~> 1.2)
-  - GoogleUtilities/Environment (7.4.0):
+  - GoogleUtilities/Environment (7.4.1):
     - PromisesObjC (~> 1.2)
-  - GoogleUtilities/Logger (7.4.0):
+  - GoogleUtilities/Logger (7.4.1):
     - GoogleUtilities/Environment
   - "gRPC-C++ (1.28.2)":
     - "gRPC-C++/Implementation (= 1.28.2)"
@@ -304,6 +307,7 @@ PODS:
   - path_provider (0.0.1):
     - Flutter
   - PromisesObjC (1.2.12)
+  - Reachability (3.2)
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
@@ -312,6 +316,7 @@ DEPENDENCIES:
   - audio_service (from `.symlinks/plugins/audio_service/ios`)
   - audio_session (from `.symlinks/plugins/audio_session/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
+  - connectivity (from `.symlinks/plugins/connectivity/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
   - flutter_isolate (from `.symlinks/plugins/flutter_isolate/ios`)
@@ -335,6 +340,7 @@ SPEC REPOS:
     - leveldb-library
     - nanopb
     - PromisesObjC
+    - Reachability
 
 EXTERNAL SOURCES:
   audio_service:
@@ -343,6 +349,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/audio_session/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
+  connectivity:
+    :path: ".symlinks/plugins/connectivity/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
   Flutter:
@@ -361,17 +369,18 @@ SPEC CHECKSUMS:
   audio_service: f509d65da41b9521a61f1c404dd58651f265a567
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
-  cloud_firestore: 5dbb01f115c77f4380e2248852518f52830d631f
-  Firebase: c121feb35e4126c0b355e3313fa9b487d47319fd
-  firebase_core: 84dcd80ac6d29c3d1039071b7306ee99688eb9c7
-  FirebaseCore: 907447d8917a4d3eb0cce2829c5a0ad21d90b432
-  FirebaseCoreDiagnostics: 68ad972f99206cef818230f3f3179d52ccfb7f8c
-  FirebaseFirestore: f495bb336b23eca23ea5d3605dce2a4cc214fde9
+  cloud_firestore: 677849586720293046982ccfa20013a6266d7928
+  connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
+  Firebase: 73c3e3b216ec1ecbc54d2ffdd4670c65c749edb1
+  firebase_core: e4d3efb030a2b2021819f8faa538bb23deb46695
+  FirebaseCore: 3f09591d51292843e2a46f18358d60bf4e996255
+  FirebaseCoreDiagnostics: 3e249cee3de5c5f9cfd6cc2a19997231286fec11
+  FirebaseFirestore: 7f6576eaca9f821e864c3e917d68aa99f4e6b613
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_isolate: 0edf5081826d071adf21759d1eb10ff5c24503b5
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  GoogleDataTransport: cd9db2180fcecd8da1b561aea31e3e56cf834aa7
-  GoogleUtilities: 284cddc7fffc14ae1907efb6f78ab95c1fccaedc
+  GoogleDataTransport: 11e3a5f2c190327df1a4a5d7e7ae3d4d5b9c9e4c
+  GoogleUtilities: f8a43108b38a68eebe8b3540e1f4f2d28843ce20
   "gRPC-C++": 13d8ccef97d5c3c441b7e3c529ef28ebee86fad2
   gRPC-Core: 4afa11bfbedf7cdecd04de535a9e046893404ed5
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
@@ -379,6 +388,7 @@ SPEC CHECKSUMS:
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
 
 PODFILE CHECKSUM: e292cea1575e7787eab173e182574efec39d39de

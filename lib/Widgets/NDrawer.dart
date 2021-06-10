@@ -1,6 +1,7 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:nnn_app/Screens/HealthySocialMedia.dart';
+import 'package:nnn_app/Screens/friendship_screen.dart';
 import 'package:nnn_app/Screens/podcast_select_screen.dart';
 
 import '../Screens/NotesPage.dart';
@@ -15,6 +16,7 @@ class NDrawer extends StatelessWidget {
   static final TFTT = 3;
   static final HEALTHY_SOCIAL_MEDIA = 4;
   static final PODCAST_SELECT = 5;
+  static final FRIENDSHIP = 6;
 
   NDrawer(this.currentPage);
 
@@ -72,6 +74,16 @@ class NDrawer extends StatelessWidget {
                   context,
                   MaterialPageRoute(builder: (context) => HealthySocialMedia()),
                 );
+              },
+            ),
+            ListTile(
+              selected: currentPage == FRIENDSHIP,
+              leading: Icon(Icons.ballot_outlined),
+              title: Text('FriendShip'),
+              onTap: () {
+                AudioService.pause();
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => FriendshipScreen()));
               },
             ),
             ListTile(

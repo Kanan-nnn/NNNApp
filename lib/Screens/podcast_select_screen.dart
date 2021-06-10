@@ -7,12 +7,9 @@ import 'package:nnn_app/Widgets/podcast_player.dart';
 import 'package:provider/provider.dart';
 
 class PodcastSelect extends StatelessWidget {
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
       appBar: NAppBar(),
       drawer: NDrawer(NDrawer.PODCAST_SELECT),
       bottomSheet: MiniPlayer(),
@@ -22,19 +19,6 @@ class PodcastSelect extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 20,
-            ),
-            Text(
-              "Welcome to the NNN Network",
-              style: TextStyle(
-                fontSize: 50,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
             PodcastSelectList(),
           ],
         ),
@@ -55,14 +39,21 @@ class PodcastSelectList extends StatelessWidget {
       child: Consumer<PodcastData>(
         builder: (context, podcastProvider, child) {
           return ListView.builder(
-              itemCount: podcastProvider.podcastList.length,
+              itemCount: podcastProvider.podcastList.length + 1,
               itemBuilder: (context, index) {
+                if (index == 0) {
+                  return Text("Welcome to the NNN Network",
+                      style: TextStyle(
+                        fontSize: 50,
+                        fontWeight: FontWeight.bold,
+                      ));
+                }
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 0.0),
                   child: PodcastImageTile(
-                      podcastProvider.podcastList[index].imageUrl,
-                      podcastProvider.podcastList[index].feedLink,
-                      podcastProvider.podcastList[index].name),
+                      podcastProvider.podcastList[index - 1].imageUrl,
+                      podcastProvider.podcastList[index - 1].feedLink,
+                      podcastProvider.podcastList[index - 1].name),
                 );
               });
         },

@@ -69,42 +69,42 @@ class MiniPlayer extends StatelessWidget with AudioMethodsMixin {
         return SizedBox(
           height: 150,
           child: Card(
-            margin: EdgeInsets.all(10),
-            child: Row(children: [
-              if (imageUrl != null) Image.network(imageUrl.toString()),
-              SizedBox(
-                width: 5,
-              ),
-              Flexible(
-                flex: 2,
-                child: Column(
-                  children: [
-                    Text(
-                      title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              margin: EdgeInsets.all(10),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                child: Row(children: [
+                  if (imageUrl != null) Image.network(imageUrl.toString()),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Flexible(
+                    flex: 2,
+                    child: Column(
+                      children: [
+                        Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        ),
+                        Expanded(
+                          child: ControlButtons(
+                              mediaState: mediaState, playing: playing),
+                        ),
+                        SeekBar(
+                          duration:
+                              mediaState?.mediaItem?.duration ?? Duration.zero,
+                          position: mediaState?.position ?? Duration.zero,
+                          onChangeEnd: (newPosition) {
+                            AudioService.seekTo(newPosition);
+                          },
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      child: Center(
-                        child: ControlButtons(
-                            mediaState: mediaState, playing: playing),
-                      ),
-                    ),
-                    SeekBar(
-                      duration:
-                          mediaState?.mediaItem?.duration ?? Duration.zero,
-                      position: mediaState?.position ?? Duration.zero,
-                      onChangeEnd: (newPosition) {
-                        AudioService.seekTo(newPosition);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ]),
-          ),
+                  ),
+                ]),
+              )),
         );
       },
     );
@@ -124,37 +124,55 @@ class ControlButtons extends StatelessWidget with AudioMethodsMixin {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        IconButton(
-            icon: Icon(
-              Icons.replay_5,
-              size: 40,
-            ),
-            onPressed: () {
-              rewind(mediaState?.position, 5);
-            }),
-        IconButton(
-            icon: Icon(Icons.replay_10, size: 40),
-            onPressed: () {
-              rewind(mediaState?.position, 10);
-            }),
+        Flexible(
+          flex: 1,
+          child: IconButton(
+              icon: Icon(
+                Icons.replay_5,
+                size: 40,
+              ),
+              onPressed: () {
+                rewind(mediaState?.position, 5);
+              }),
+        ),
+        Flexible(
+          flex: 1,
+          child: IconButton(
+              icon: Icon(Icons.replay_10, size: 40),
+              onPressed: () {
+                rewind(mediaState?.position, 10);
+              }),
+        ),
         playing
-            ? IconButton(icon: Icon(Icons.pause, size: 40), onPressed: pause)
-            : IconButton(
-                icon: Icon(Icons.play_arrow, size: 40), onPressed: play),
-        IconButton(
-            icon: Icon(Icons.replay_30, size: 40),
-            onPressed: () {
-              rewind(mediaState?.position, 30);
-            }),
-        IconButton(
-            icon: Icon(Icons.night_shelter, size: 40),
-            onPressed: () {
-              showModalBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return SleepTimerSheet();
-                  });
-            }),
+            ? Flexible(
+                flex: 1,
+                child: IconButton(
+                    icon: Icon(Icons.pause, size: 40), onPressed: pause))
+            : Flexible(
+                flex: 1,
+                child: IconButton(
+                    icon: Icon(Icons.play_arrow, size: 40), onPressed: play),
+              ),
+        Flexible(
+          flex: 1,
+          child: IconButton(
+              icon: Icon(Icons.replay_30, size: 40),
+              onPressed: () {
+                rewind(mediaState?.position, 30);
+              }),
+        ),
+        Flexible(
+          flex: 1,
+          child: IconButton(
+              icon: Icon(Icons.night_shelter, size: 40),
+              onPressed: () {
+                showModalBottomSheet(
+                    context: context,
+                    builder: (context) {
+                      return SleepTimerSheet();
+                    });
+              }),
+        ),
       ],
     );
   }
@@ -187,54 +205,58 @@ class BigPodcastPlayer extends StatelessWidget with AudioMethodsMixin {
         final mediaState = snapshot.data?.mediaState;
         return Column(
           children: [
-            Row(
-              children: [
-                if (imageUrl != null)
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 5),
+              child: Row(
+                // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  if (imageUrl != null)
+                    Flexible(
+                        flex: 1,
+                        child: Column(
+                          children: [
+                            SizedBox(child: Image.network(imageUrl.toString())),
+                          ],
+                        )),
+                  // SizedBox(
+                  //   width: 5,
+                  // ),
                   Flexible(
-                      flex: 1,
-                      child: Column(
-                        children: [
-                          SizedBox(child: Image.network(imageUrl.toString())),
-                        ],
-                      )),
-                SizedBox(
-                  width: 10,
-                ),
-                Flexible(
-                  flex: 2,
-                  child: Column(
-                    children: [
-                      Center(
-                        child: Container(
-                          padding: EdgeInsets.all(5),
-                          child: Text(
-                            "NOW PLAYING",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                // fontStyle: FontStyle.italic,
-                                fontSize: 15,
-                                color: Colors.white),
+                    flex: 2,
+                    child: Column(
+                      children: [
+                        Center(
+                          child: Container(
+                            padding: EdgeInsets.all(5),
+                            child: Text(
+                              "NOW PLAYING",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  // fontStyle: FontStyle.italic,
+                                  fontSize: 15,
+                                  color: Colors.white),
+                            ),
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
                           ),
-                          decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20))),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        title,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 20),
-                      ),
-                    ],
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          title,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Center(
               child: ControlButtons(mediaState: mediaState, playing: playing),

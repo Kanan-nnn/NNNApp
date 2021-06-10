@@ -19,7 +19,7 @@ class PowerOnPage extends StatefulWidget {
 }
 
 class _PowerOnPageState extends State<PowerOnPage> {
-  var powerButtonColor = Colors.black;
+  bool poweredOn = false;
   final snackBarNoInternet = SnackBar(content: Text('No internet connection'));
   final snackBarLoading = SnackBar(content: Text('Fetching podcast details'));
 
@@ -58,11 +58,12 @@ class _PowerOnPageState extends State<PowerOnPage> {
     if (!await isConnectedToInternet()) {
       ScaffoldMessenger.of(context).showSnackBar(snackBarNoInternet);
     } else {
+      if (poweredOn) return;
       ScaffoldMessenger.of(context).showSnackBar(snackBarLoading);
-      await _init();
       setState(() {
-        powerButtonColor = Colors.greenAccent[400]!;
+        poweredOn = true;
       });
+      await _init();
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => PodcastSelect()),
@@ -87,7 +88,7 @@ class _PowerOnPageState extends State<PowerOnPage> {
             iconSize: 100,
             icon: Icon(
               Icons.power_settings_new_sharp,
-              color: powerButtonColor,
+              color: poweredOn ? Colors.greenAccent : Colors.black,
             ),
             onPressed: () {
               loadPodcastsAndNavigate();

@@ -2,7 +2,6 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:nnn_app/Model/podcast_provider.dart';
 import 'package:provider/provider.dart';
-
 import 'Screens/PowerOnPage.dart';
 
 void main() {
