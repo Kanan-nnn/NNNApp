@@ -40,6 +40,7 @@ dependencies:
   path_provider: ^2.0.1
   rive: ^0.7.11
   sqflite: ^2.0.0+3
+  flutter_chat_ui: ^1.4.4
 
 dev_dependencies:
   flutter_launcher_icons: ^0.9.0
