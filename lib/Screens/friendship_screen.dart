@@ -386,30 +386,15 @@ class _FriendshipScreenState extends State<FriendshipScreen> {
                     if (formKey.currentState!.validate()) {
                       FocusScope.of(context).unfocus();
 
-                      if (!isOverflow()) {
-                        print("No Overflow");
-
-                        friendAdded?.value = true;
-                        friendOverflow?.value = false;
-                        Provider.of<PodcastData>(context, listen: false).insert(
-                            Friend(
-                                    name: friendController.text,
-                                    percentage: overflowPercentage)
-                                .toMap());
-                      } else {
-                        print("Overflow");
-                        friendOverflow?.value = true;
-                        friendAdded?.value = true;
-
-                        Provider.of<PodcastData>(context, listen: false)
-                            .deleteAll();
-                        Provider.of<PodcastData>(context, listen: false)
-                            .updateDrownedCount(numberOfFriends);
-                        setState(() {
-                          shipSunk = true;
-                        });
-                        _playYouDied();
-                      }
+                      
+                      print("No Overflow");
+                      friendAdded?.value = true;
+                      friendOverflow?.value = false;
+                      Provider.of<PodcastData>(context, listen: false).insert(
+                         Friend(
+                                 name: friendController.text,
+                                 percentage: overflowPercentage)
+                             .toMap());
                       updateOverflowPercentage();
                       formKey.currentState?.reset();
                       friendController.clear();
