@@ -24,13 +24,13 @@ dependencies:
   flutter:
     sdk: flutter
 
-  audio_service: ^0.17.0
-  provider: ^5.0.0
+  audio_service: ^0.18.1
+  provider: ^6.0.1
   html: ^0.15.0
-  just_audio: ^0.7.3
+  just_audio: ^0.9.18
   dart_rss: ^2.0.1
-  firebase_core: ^1.1.0
-  cloud_firestore: ^1.0.7
+  firebase_core: ^1.10.0
+  cloud_firestore: ^3.1.0
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -41,6 +41,7 @@ dependencies:
   rive: ^0.7.11
   sqflite: ^2.0.0+3
   flutter_chat_ui: ^1.4.4
+  get_it: ^7.2.0
 
 dev_dependencies:
   flutter_launcher_icons: ^0.9.0

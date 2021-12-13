@@ -1,18 +1,21 @@
 import 'dart:math';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nnn_app/Model/podcast_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter/material.dart';
 
 mixin AudioMethodsMixin {
+  final AudioHandler _audioHandler = GetIt.instance<AudioHandler>();
+
   /// A stream reporting the combined state of the current media item and its
   /// current position.
   Stream<MediaState> get _mediaStateStream =>
       Rx.combineLatest2<MediaItem?, Duration, MediaState>(
-          AudioService.currentMediaItemStream,
-          AudioService.positionStream,
+          _audioHandler.mediaItem,
+          AudioService.position,
           (mediaItem, position) => MediaState(mediaItem, position));
 
   /// A stream reporting the combined state of the current media item and its
@@ -20,23 +23,23 @@ mixin AudioMethodsMixin {
   Stream<PodcastPlayerState> get _podcastPlayerStateStream =>
       Rx.combineLatest2<MediaState, PlaybackState, PodcastPlayerState>(
           _mediaStateStream,
-          AudioService.playbackStateStream,
+          _audioHandler.playbackState,
           (mediaState, playback) => PodcastPlayerState(mediaState, playback));
 
   rewind(Duration? currentPosition, int secondsToRewind) {
     if (currentPosition == null) return;
     var totalOffset = (currentPosition.inSeconds - secondsToRewind);
     // print("total offset $totalOffset");
-    AudioService.seekTo(Duration(seconds: totalOffset < 0 ? 0 : totalOffset));
+    _audioHandler.seek(Duration(seconds: totalOffset < 0 ? 0 : totalOffset));
   }
 
-  play() => AudioService.play();
+  play() => _audioHandler.play();
 
-  stop() => AudioService.stop();
+  stop() => _audioHandler.stop();
 
-  pause() => AudioService.pause();
+  pause() => _audioHandler.pause();
 
-  seek(interval) => AudioService.seekTo(interval);
+  seek(interval) => _audioHandler.seek(interval);
 }
 
 class MiniPlayer extends StatelessWidget with AudioMethodsMixin {
@@ -97,7 +100,7 @@ class MiniPlayer extends StatelessWidget with AudioMethodsMixin {
                               mediaState?.mediaItem?.duration ?? Duration.zero,
                           position: mediaState?.position ?? Duration.zero,
                           onChangeEnd: (newPosition) {
-                            AudioService.seekTo(newPosition);
+                            _audioHandler.seek(newPosition);
                           },
                         ),
                       ],
@@ -115,8 +118,7 @@ class ControlButtons extends StatelessWidget with AudioMethodsMixin {
   final MediaState? mediaState;
   final bool playing;
 
-  const ControlButtons(
-      {Key? key, required this.mediaState, required this.playing})
+  ControlButtons({Key? key, required this.mediaState, required this.playing})
       : super(key: key);
 
   @override
@@ -199,8 +201,6 @@ class BigPodcastPlayer extends StatelessWidget with AudioMethodsMixin {
         //Current Playback state
         final currentPlaybackState = snapshot.data?.playbackState;
         var playing = currentPlaybackState?.playing ?? false;
-        var processingState = currentPlaybackState?.processingState ??
-            AudioProcessingState.stopped;
         //Current Media State
         final mediaState = snapshot.data?.mediaState;
         return Column(

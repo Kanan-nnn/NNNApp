@@ -1,5 +1,6 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nnn_app/Model/podcast_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +24,7 @@ class EpisodeList extends StatelessWidget {
               child: ListTile(
                 onTap: () {
                   print(episodes[index].id);
-                  AudioService.playMediaItem(episodes[index]);
+                  GetIt.instance<AudioHandler>().playMediaItem(episodes[index]);
                 },
                 title: Text(
                   episodes[index].displayTitle!,

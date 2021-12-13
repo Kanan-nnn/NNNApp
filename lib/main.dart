@@ -1,4 +1,3 @@
-import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
 import 'package:nnn_app/Model/podcast_provider.dart';
 import 'package:provider/provider.dart';
@@ -11,8 +10,7 @@ void main() {
       theme: ThemeData.light(),
       darkTheme: ThemeData.dark(),
       title: 'NNN App',
-      //Double check scope of this widget
-      home: AudioServiceWidget(child: PowerOnPage()),
+      home: PowerOnPage(),
       debugShowCheckedModeBanner: false,
       // routes: {
       //   'PowerOnPage': (context) => PowerOnPage(),

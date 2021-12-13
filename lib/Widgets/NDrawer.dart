@@ -1,7 +1,9 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:nnn_app/Screens/HealthySocialMedia.dart';
 import 'package:nnn_app/Screens/friendship_screen.dart';
+import 'package:nnn_app/Screens/kitty_party_picker.dart';
 import 'package:nnn_app/Screens/podcast_select_screen.dart';
 import 'package:nnn_app/Screens/HealthyChat.dart';
 
@@ -18,7 +20,8 @@ class NDrawer extends StatelessWidget {
   static final HEALTHY_SOCIAL_MEDIA = 4;
   static final PODCAST_SELECT = 5;
   static final FRIENDSHIP = 6;
-  static final HEALTHY_CHAT = 7;
+  static final KITTYPARTYPICKER = 7;
+  static final HEALTHY_CHAT = 8;
 
   NDrawer(this.currentPage);
 
@@ -83,13 +86,21 @@ class NDrawer extends StatelessWidget {
               leading: Icon(Icons.ballot_outlined),
               title: Text('FriendShip'),
               onTap: () {
-                AudioService.pause();
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => FriendshipScreen()));
               },
             ),
             ListTile(
-              selected: currentPage == HEALTHY_CHAT,
+              selected: currentPage == KITTYPARTYPICKER,
+              leading: Icon(Icons.money_sharp),
+              title: Text('Kitty Party Picker'),
+              onTap: () {
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => KittyPartyHelper()));
+              },
+            ),
+            ListTile(
+               selected: currentPage == HEALTHY_CHAT,
               leading: Icon(Icons.chat_bubble_outline),
               title: Text('Healthy Chat'),
               onTap: () {
@@ -102,7 +113,7 @@ class NDrawer extends StatelessWidget {
               leading: Icon(Icons.power_settings_new_sharp),
               title: Text('Shutdown'),
               onTap: () {
-                AudioService.pause();
+                GetIt.instance<AudioHandler>().stop();
                 Navigator.of(context).pushReplacement(
                     MaterialPageRoute(builder: (context) => PowerOnPage()));
               },
