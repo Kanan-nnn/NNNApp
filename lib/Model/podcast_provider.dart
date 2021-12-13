@@ -225,10 +225,10 @@ class PodcastData with ChangeNotifier {
       db.insert(statisticsTable, {'$columnTotalDrowned': 1});
       _drownedCount = 1;
     } else {
-      _drownedCount = (result.first['$columnTotalDrowned'] as int) + numberDrowned;
+      _drownedCount =
+          (result.first['$columnTotalDrowned'] as int) + numberDrowned;
       await db.rawQuery(
           'UPDATE $statisticsTable SET $columnTotalDrowned = $_drownedCount');
-      
     }
     notifyListeners();
   }
