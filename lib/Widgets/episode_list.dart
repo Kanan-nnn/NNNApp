@@ -17,24 +17,32 @@ class EpisodeList extends StatelessWidget {
         return ListView.builder(
           itemBuilder: (context, index) {
             return Card(
-              margin: EdgeInsets.all(4),
+              margin: EdgeInsets.fromLTRB(10, 8, 10, 8),
               elevation: 4,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5)),
               child: ListTile(
-                onTap: () {
-                  print(episodes[index].id);
-                  GetIt.instance<AudioHandler>().playMediaItem(episodes[index]);
-                },
-                title: Text(
-                  episodes[index].displayTitle!,
-                ),
-                subtitle: Text(
-                  episodes[index].displayDescription!,
-                  maxLines: 4,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
+                  onTap: () {
+                    print(episodes[index].id);
+                    GetIt.instance<AudioHandler>()
+                        .playMediaItem(episodes[index]);
+                  },
+                  title: Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(episodes[index].displayTitle!,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        )),
+                  ),
+                  subtitle: Padding(
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    child: Text(
+                      episodes[index].displayDescription!,
+                      maxLines: 3,
+                      overflow: TextOverflow.visible,
+                    ),
+                  )),
             );
           },
           itemCount: episodes.length,
