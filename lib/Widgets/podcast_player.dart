@@ -45,71 +45,77 @@ mixin AudioMethodsMixin {
 class MiniPlayer extends StatelessWidget with AudioMethodsMixin {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<PodcastPlayerState>(
-      stream: _podcastPlayerStateStream,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          print("Stream has no data");
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: StreamBuilder<PodcastPlayerState>(
+        stream: _podcastPlayerStateStream,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            print("Stream has no data");
+            return SizedBox(
+              height: 0,
+            );
+          }
+          //Current Media Item
+          final currentMediaItem = snapshot.data?.mediaState.mediaItem;
+          if (currentMediaItem == null)
+            return SizedBox(
+              height: 0,
+            );
+          var title = currentMediaItem.title;
+          var imageUrl = currentMediaItem.artUri;
+          //Current Playback state
+          final currentPlaybackState = snapshot.data?.playbackState;
+          var playing = currentPlaybackState?.playing ?? false;
+          // var processingState = currentPlaybackState?.processingState ??
+          // AudioProcessingState.stopped;
+          //Current Media State
+          final mediaState = snapshot.data?.mediaState;
           return SizedBox(
-            height: 0,
-          );
-        }
-        //Current Media Item
-        final currentMediaItem = snapshot.data?.mediaState.mediaItem;
-        if (currentMediaItem == null)
-          return SizedBox(
-            height: 0,
-          );
-        var title = currentMediaItem.title;
-        var imageUrl = currentMediaItem.artUri;
-        //Current Playback state
-        final currentPlaybackState = snapshot.data?.playbackState;
-        var playing = currentPlaybackState?.playing ?? false;
-        // var processingState = currentPlaybackState?.processingState ??
-        // AudioProcessingState.stopped;
-        //Current Media State
-        final mediaState = snapshot.data?.mediaState;
-        return SizedBox(
-          height: 150,
-          child: Card(
-              margin: EdgeInsets.all(10),
-              child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10),
-                child: Row(children: [
-                  if (imageUrl != null) Image.network(imageUrl.toString()),
-                  SizedBox(
-                    width: 5,
-                  ),
-                  Flexible(
-                    flex: 2,
-                    child: Column(
-                      children: [
-                        Text(
-                          title,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
-                        ),
-                        Expanded(
-                          child: ControlButtons(
-                              mediaState: mediaState, playing: playing),
-                        ),
-                        SeekBar(
-                          duration:
-                              mediaState?.mediaItem?.duration ?? Duration.zero,
-                          position: mediaState?.position ?? Duration.zero,
-                          onChangeEnd: (newPosition) {
-                            _audioHandler.seek(newPosition);
-                          },
-                        ),
-                      ],
+            height: 100,
+            child: Card(
+                margin: EdgeInsets.symmetric(vertical: 10),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 0),
+                  child: Row(children: [
+                    if (imageUrl != null) Image.network(imageUrl.toString()),
+                    SizedBox(
+                      width: 5,
                     ),
-                  ),
-                ]),
-              )),
-        );
-      },
+                    Flexible(
+                      flex: 2,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Text(
+                              title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 14),
+                            ),
+                          ),
+                          Expanded(
+                            child: MiniControlButtons(
+                                mediaState: mediaState, playing: playing),
+                          ),
+                          // SeekBar(
+                          //   duration:
+                          //       mediaState?.mediaItem?.duration ?? Duration.zero,
+                          //   position: mediaState?.position ?? Duration.zero,
+                          //   onChangeEnd: (newPosition) {
+                          //     _audioHandler.seek(newPosition);
+                          //   },
+                          // ),
+                        ],
+                      ),
+                    ),
+                  ]),
+                )),
+          );
+        },
+      ),
     );
   }
 }
@@ -123,59 +129,132 @@ class ControlButtons extends StatelessWidget with AudioMethodsMixin {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Flexible(
-          flex: 1,
-          child: IconButton(
-              icon: Icon(
-                Icons.replay_5,
-                size: 40,
-              ),
-              onPressed: () {
-                rewind(mediaState?.position, 5);
-              }),
-        ),
-        Flexible(
-          flex: 1,
-          child: IconButton(
-              icon: Icon(Icons.replay_10, size: 40),
-              onPressed: () {
-                rewind(mediaState?.position, 10);
-              }),
-        ),
-        playing
-            ? Flexible(
-                flex: 1,
-                child: IconButton(
-                    icon: Icon(Icons.pause, size: 40), onPressed: pause))
-            : Flexible(
-                flex: 1,
-                child: IconButton(
-                    icon: Icon(Icons.play_arrow, size: 40), onPressed: play),
-              ),
-        Flexible(
-          flex: 1,
-          child: IconButton(
-              icon: Icon(Icons.replay_30, size: 40),
-              onPressed: () {
-                rewind(mediaState?.position, 30);
-              }),
-        ),
-        Flexible(
-          flex: 1,
-          child: IconButton(
-              icon: Icon(Icons.night_shelter, size: 40),
-              onPressed: () {
-                showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return SleepTimerSheet();
-                    });
-              }),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Flexible(
+            flex: 1,
+            child: IconButton(
+                icon: Icon(
+                  Icons.replay_5,
+                  size: 40,
+                ),
+                onPressed: () {
+                  rewind(mediaState?.position, 5);
+                }),
+          ),
+          Flexible(
+            flex: 1,
+            child: IconButton(
+                icon: Icon(Icons.replay_10, size: 40),
+                onPressed: () {
+                  rewind(mediaState?.position, 10);
+                }),
+          ),
+          playing
+              ? Flexible(
+                  flex: 1,
+                  child: IconButton(
+                      icon: Icon(Icons.pause, size: 40), onPressed: pause))
+              : Flexible(
+                  flex: 1,
+                  child: IconButton(
+                      icon: Icon(Icons.play_arrow, size: 40), onPressed: play),
+                ),
+          Flexible(
+            flex: 1,
+            child: IconButton(
+                icon: Icon(Icons.replay_30, size: 40),
+                onPressed: () {
+                  rewind(mediaState?.position, 30);
+                }),
+          ),
+          Flexible(
+            flex: 1,
+            child: IconButton(
+                icon: Icon(Icons.night_shelter, size: 40),
+                onPressed: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return SleepTimerSheet();
+                      });
+                }),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class MiniControlButtons extends StatelessWidget with AudioMethodsMixin {
+  final MediaState? mediaState;
+  final bool playing;
+
+  MiniControlButtons(
+      {Key? key, required this.mediaState, required this.playing})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Flexible(
+            flex: 1,
+            child: IconButton(
+                icon: Icon(
+                  Icons.replay_5,
+                  size: 25,
+                ),
+                onPressed: () {
+                  rewind(mediaState?.position, 5);
+                }),
+          ),
+          Flexible(
+            flex: 1,
+            child: IconButton(
+                icon: Icon(Icons.replay_10, size: 25),
+                onPressed: () {
+                  rewind(mediaState?.position, 10);
+                }),
+          ),
+          playing
+              ? Flexible(
+                  flex: 1,
+                  child: IconButton(
+                      icon: Icon(Icons.pause, size: 25), onPressed: pause))
+              : Flexible(
+                  flex: 1,
+                  child: IconButton(
+                      icon: Icon(Icons.play_arrow, size: 25), onPressed: play),
+                ),
+          Flexible(
+            flex: 1,
+            child: IconButton(
+                icon: Icon(Icons.replay_30, size: 25),
+                onPressed: () {
+                  rewind(mediaState?.position, 30);
+                }),
+          ),
+          Flexible(
+            flex: 1,
+            child: IconButton(
+                icon: Icon(Icons.night_shelter, size: 25),
+                onPressed: () {
+                  showModalBottomSheet(
+                      context: context,
+                      builder: (context) {
+                        return SleepTimerSheet();
+                      });
+                }),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -183,94 +262,105 @@ class ControlButtons extends StatelessWidget with AudioMethodsMixin {
 class BigPodcastPlayer extends StatelessWidget with AudioMethodsMixin {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<PodcastPlayerState>(
-      stream: _podcastPlayerStateStream,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Center(
-              child: Text(
-            "Choose an epiosde",
-            style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic),
-          ));
-        }
-        //Current Media Item
-        final currentMediaItem = snapshot.data?.mediaState.mediaItem;
-        if (currentMediaItem == null) return Container();
-        var title = currentMediaItem.title;
-        var imageUrl = currentMediaItem.artUri;
-        //Current Playback state
-        final currentPlaybackState = snapshot.data?.playbackState;
-        var playing = currentPlaybackState?.playing ?? false;
-        //Current Media State
-        final mediaState = snapshot.data?.mediaState;
-        return Column(
-          children: [
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 5),
-              child: Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  if (imageUrl != null)
-                    Flexible(
-                        flex: 1,
+    return Card(
+      elevation: 4,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 8.0),
+        child: StreamBuilder<PodcastPlayerState>(
+          stream: _podcastPlayerStateStream,
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                  child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Text(
+                        "Choose an episode",
+                        style: TextStyle(
+                            fontSize: 20, fontStyle: FontStyle.italic),
+                      )));
+            }
+            //Current Media Item
+            final currentMediaItem = snapshot.data?.mediaState.mediaItem;
+            if (currentMediaItem == null) return Container();
+            var title = currentMediaItem.title;
+            var imageUrl = currentMediaItem.artUri;
+            //Current Playback state
+            final currentPlaybackState = snapshot.data?.playbackState;
+            var playing = currentPlaybackState?.playing ?? false;
+            //Current Media State
+            final mediaState = snapshot.data?.mediaState;
+            return Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  child: Row(
+                    // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      if (imageUrl != null)
+                        Flexible(
+                            flex: 1,
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                    child: Image.network(imageUrl.toString())),
+                              ],
+                            )),
+                      // SizedBox(
+                      //   width: 5,
+                      // ),
+                      Flexible(
+                        flex: 2,
                         child: Column(
                           children: [
-                            SizedBox(child: Image.network(imageUrl.toString())),
-                          ],
-                        )),
-                  // SizedBox(
-                  //   width: 5,
-                  // ),
-                  Flexible(
-                    flex: 2,
-                    child: Column(
-                      children: [
-                        Center(
-                          child: Container(
-                            padding: EdgeInsets.all(5),
-                            child: Text(
-                              "NOW PLAYING",
+                            Center(
+                              child: Container(
+                                padding: EdgeInsets.all(8),
+                                child: Text(
+                                  "NOW PLAYING",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      // fontStyle: FontStyle.italic,
+                                      fontSize: 15,
+                                      color: Colors.white),
+                                ),
+                                decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20))),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              title,
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  // fontStyle: FontStyle.italic,
-                                  fontSize: 15,
-                                  color: Colors.white),
+                                  fontWeight: FontWeight.bold, fontSize: 20),
                             ),
-                            decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                          ),
+                          ],
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          title,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            Center(
-              child: ControlButtons(mediaState: mediaState, playing: playing),
-            ),
-            SeekBar(
-              duration: mediaState?.mediaItem?.duration ?? Duration.zero,
-              position: mediaState?.position ?? Duration.zero,
-              onChangeEnd: (newPosition) {
-                AudioService.seekTo(newPosition);
-              },
-            ),
-          ],
-        );
-      },
+                ),
+                Center(
+                  child:
+                      ControlButtons(mediaState: mediaState, playing: playing),
+                ),
+                SeekBar(
+                  duration: mediaState?.mediaItem?.duration ?? Duration.zero,
+                  position: mediaState?.position ?? Duration.zero,
+                  onChangeEnd: (newPosition) {
+                    _audioHandler.seek(newPosition);
+                  },
+                ),
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 }
@@ -310,41 +400,44 @@ class _SeekBarState extends State<SeekBar> {
     if (_dragValue != null && !_dragging) {
       _dragValue = null;
     }
-    return Stack(
-      children: [
-        Slider(
-          min: 0.0,
-          max: widget.duration.inMilliseconds.toDouble(),
-          value: value,
-          onChanged: (value) {
-            if (!_dragging) {
-              _dragging = true;
-            }
-            setState(() {
-              _dragValue = value;
-            });
-            if (widget.onChanged != null) {
-              widget.onChanged!(Duration(milliseconds: value.round()));
-            }
-          },
-          onChangeEnd: (value) {
-            if (widget.onChangeEnd != null) {
-              widget.onChangeEnd!(Duration(milliseconds: value.round()));
-            }
-            _dragging = false;
-          },
-        ),
-        Positioned(
-          right: 16.0,
-          bottom: 0.0,
-          child: Text(
-              RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
-                      .firstMatch("$_remaining")
-                      ?.group(1) ??
-                  '$_remaining',
-              style: Theme.of(context).textTheme.caption),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Stack(
+        children: [
+          Slider(
+            min: 0.0,
+            max: widget.duration.inMilliseconds.toDouble(),
+            value: value,
+            onChanged: (value) {
+              if (!_dragging) {
+                _dragging = true;
+              }
+              setState(() {
+                _dragValue = value;
+              });
+              if (widget.onChanged != null) {
+                widget.onChanged!(Duration(milliseconds: value.round()));
+              }
+            },
+            onChangeEnd: (value) {
+              if (widget.onChangeEnd != null) {
+                widget.onChangeEnd!(Duration(milliseconds: value.round()));
+              }
+              _dragging = false;
+            },
+          ),
+          Positioned(
+            right: 16.0,
+            bottom: 0.0,
+            child: Text(
+                RegExp(r'((^0*[1-9]\d*:)?\d{2}:\d{2})\.\d+$')
+                        .firstMatch("$_remaining")
+                        ?.group(1) ??
+                    '$_remaining',
+                style: Theme.of(context).textTheme.caption),
+          ),
+        ],
+      ),
     );
   }
 

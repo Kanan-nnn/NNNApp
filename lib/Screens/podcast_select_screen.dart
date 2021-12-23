@@ -14,7 +14,7 @@ class PodcastSelect extends StatelessWidget {
       drawer: NDrawer(NDrawer.PODCAST_SELECT),
       bottomSheet: MiniPlayer(),
       body: Container(
-        padding: EdgeInsets.only(top: 60, left: 20, right: 20, bottom: 20),
+        padding: EdgeInsets.only(top: 10, left: 20, right: 20, bottom: 10),
         // color: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,21 +39,31 @@ class PodcastSelectList extends StatelessWidget {
       child: Consumer<PodcastData>(
         builder: (context, podcastProvider, child) {
           return ListView.builder(
-              itemCount: podcastProvider.podcastList.length + 1,
+              itemCount: podcastProvider.podcastList.length + 2,
               itemBuilder: (context, index) {
                 if (index == 0) {
                   return Text("Welcome to the NNN Network",
                       style: TextStyle(
-                        fontSize: 50,
+                        fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ));
                 }
+                if (index == 1) {
+                  return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child:
+                          Text("Please select a podcast from the list below.",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal,
+                              )));
+                }
                 return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 0.0),
+                  padding: const EdgeInsets.symmetric(vertical: 5.0),
                   child: PodcastImageTile(
-                      podcastProvider.podcastList[index - 1].imageUrl,
-                      podcastProvider.podcastList[index - 1].feedLink,
-                      podcastProvider.podcastList[index - 1].name),
+                      podcastProvider.podcastList[index - 2].imageUrl,
+                      podcastProvider.podcastList[index - 2].feedLink,
+                      podcastProvider.podcastList[index - 2].name),
                 );
               });
         },
@@ -80,16 +90,17 @@ class PodcastImageTile extends StatelessWidget {
           );
         },
         child: Card(
+          elevation: 10,
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: Container(
             padding: EdgeInsets.all(10),
-            color: Colors.red[200],
+            color: Colors.white10,
             child: ListTile(
               leading: Image.network(imageUrl),
               title: Text(
                 podcastName,
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
               ),
             ),
           ),
