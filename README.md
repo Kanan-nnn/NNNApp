@@ -1,6 +1,7 @@
-# nnn_app
+# THE NNNN APP
+### The most officaial NNNN podcast streamer application available on both the [Android Store](https://play.google.com/store/apps/details?id=com.nnn_app)
 
-NNN podcast streamer
+![The NNNN logo](https://github.com/Glitchyi/NNNApp/blob/main/images/NNNLogo.png)
 
 ## Getting Started
 
